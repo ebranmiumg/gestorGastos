@@ -1,0 +1,35 @@
+<!-- MODAL CREAR ANIO -->
+<button class="btn btn-outline" (click)="crearModal = true">Crear Año</button>
+
+<clr-modal [(clrModalOpen)]="crearModal">
+  <h3 class="modal-title">No "x" in the top-right corner</h3>
+  <div class="modal-body">
+    <form clrForm>
+      <!-- INPUT numero anio -->
+      <clr-input-container>
+        <label>Numero anio</label>
+        <input clrInput placeholder="Numero Anio" name="numeroAnio" [(ngModel)]="anioAddModel.numeroAnio" />
+      </clr-input-container>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addAnioCollection()">Crear</button>
+  </div>
+</clr-modal>
+<!-- FINAL MODAL CREAR ANIO -->
+
+<div class="clr-row">
+  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let item of anioModel | async">
+    <div class="card">
+      <h3 class="card-header">{{item.numeroAnio}}</h3>
+      <div class="card-block">
+        <h4 class="card-title"></h4>
+        <div class="card-text">...</div>
+      </div>
+      <div class="card-footer">
+        <button class="btn btn-sm btn-link">Footer Action 1</button>
+        <button class="btn btn-sm btn-link">Footer Action 2</button>
+      </div>
+    </div>
+  </div>
+</div>

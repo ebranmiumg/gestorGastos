@@ -1,0 +1,14 @@
+{
+  "projects": {
+    "default": "gestorgastos2023-c2f31"
+  },
+  "targets": {
+    "gestorgastos2023-c2f31": {
+      "hosting": {
+        "GestorGastos2023": [
+          "gestorgastos2023-c2f31"
+        ]
+      }
+    }
+  }
+}

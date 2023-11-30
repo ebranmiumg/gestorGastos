@@ -1,0 +1,181 @@
+<!-- MODAL AGREGAR NUEVO GASTO -->
+<button class="btn btn-outline" (click)="nuevoGastoModal = true">Agregar Gasto</button>
+
+<clr-modal [(clrModalOpen)]="nuevoGastoModal">
+  <h3 class="modal-title">No "x" in the top-right corner</h3>
+  <div class="modal-body">
+    <form clrForm>
+      <!-- PRIMER BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Persona Gasto -->
+          <clr-input-container>
+            <label>Persona Gasto</label>
+            <input clrInput placeholder="Persona Gasto" name="personGasto" [(ngModel)]="gastoAddModel.personGasto"
+              style="width: 100%;" />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- DATE PICKER Fecha Gasto -->
+          <clr-date-container>
+            <label>Fecha Gasto</label>
+            <input type="date" autocomplete="off" clrDate name="fechaGasto" [(ngModel)]="gastoAddModel.fechaGasto" />
+          </clr-date-container>
+        </div>
+      </div>
+      <!-- TERMINA PRIMER BLOQUE FORMULARIO AGREGAR -->
+      <!-- SEGUNDO BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Anio Gasto -->
+          <clr-input-container>
+            <label>Año Gasto</label>
+            <input clrInput placeholder="Año Gasto" name="anioGasto" [(ngModel)]="gastoAddModel.anioGasto"
+              [disabled]="true" style="width: 100%;" />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Mes Gasto -->
+          <clr-datalist-container>
+            <label>Mes Gasto</label>
+            <input clrDatalistInput [(ngModel)]="gastoAddModel.mesGasto" placeholder="Mes Gasto" name="mesGasto"
+              style="width: 100%;" />
+            <datalist>
+              <option *ngFor="let item of mesModel | async" [value]="item.nombreMes"></option>
+            </datalist>
+          </clr-datalist-container>
+        </div>
+      </div>
+      <!-- TERMINA SEGUNDO BLOQUE FORMULARIO AGREGAR -->
+      <!-- TERCER BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <clr-textarea-container>
+            <label>Descripcion</label>
+            <textarea clrTextarea [(ngModel)]="gastoAddModel.descripcionGasto" name="descripcionGasto"
+              style="width: 100%;" required></textarea>
+          </clr-textarea-container>
+        </div>
+      </div>
+      <!-- TERMINA TERCER BLOQUE FORMULARIO AGREGAR -->
+      <!-- CUARTO BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Categoria Gasto -->
+          <clr-datalist-container>
+            <label>Categoria Gasto</label>
+            <input clrDatalistInput [(ngModel)]="gastoAddModel.categoriaGasto" placeholder="Categoria Gasto"
+              name="categoriaGasto" style="width: 100%;" />
+            <datalist>
+              <option *ngFor="let item of catModel | async" [value]="item.nombreGasto"></option>
+            </datalist>
+          </clr-datalist-container>
+        </div>
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Monto Gasto -->
+          <clr-input-container>
+            <label>Monto Gasto</label>
+            <input clrInput placeholder="Monto Gasto" name="montoGasto" [(ngModel)]="gastoAddModel.costo" />
+          </clr-input-container>
+        </div>
+      </div>
+      <!-- TERMINA CUARTO BLOQUE FORMULARIO AGREGAR -->
+    </form>
+
+
+  </div>
+
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addGastoCollection()">Crear</button>
+  </div>
+</clr-modal>
+<!-- FIN MODAL AGREGAR NUEVO GASTO -->
+
+
+<!-- COMIENZO ACCORDION POR AÑO -->
+<clr-accordion>
+  <clr-accordion-panel *ngFor="let item of anioModel | async" (click)="getGastosXAnio(item.numeroAnio)">
+    <clr-accordion-title>{{item.numeroAnio}}</clr-accordion-title>
+    <!-- CONTENIDO DEL ACCORDION -->
+    <clr-accordion-content *clrIfExpanded>
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let mes of sumByMonth ">
+          <a class="card clickable" (click)="getGastosDetalleXMes(item.numeroAnio, mes.mes)">
+            <h3 class="card-header">{{mes.mes}}</h3>
+            <div class="card-block">
+              <div class="card-text">Gasto Realizado: Q. {{mes.suma}}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </clr-accordion-content>
+  </clr-accordion-panel>
+</clr-accordion>
+<!-- FINAL ACCORDION POR AÑO -->
+
+
+<!-- COMIENZO MODAL CLICK MES POR ANIO -->
+<clr-modal [(clrModalOpen)]="mesXAnioModal" [clrModalSize]="'xl'">
+  <h3 class="modal-title">Resumen Mensual</h3>
+
+  <div class="modal-body">
+    <div class="clr-row">
+      <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+        <!-- GRAFICA -->
+        <canvas baseChart class="chart" [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"
+          [plugins]="pieChartPlugins">
+        </canvas>
+      </div>
+      <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+        <clr-datagrid>
+          <clr-dg-column>Categoria Gasto</clr-dg-column>
+          <clr-dg-column>Suma Gasto</clr-dg-column>
+
+          <clr-dg-row *ngFor="let mes of sumaPorCategoriaList" (click)="getDetalleCategoriaXMes(mes.nombreCategoria)">
+            <clr-dg-cell>{{mes.nombreCategoria}}</clr-dg-cell>
+            <clr-dg-cell>{{mes.suma | currency:'GTQ'}}</clr-dg-cell>
+          </clr-dg-row>
+
+          <clr-dg-footer>{{ sumaPorCategoriaList.length }} users</clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </div>
+
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="mesXAnioModal = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="mesXAnioModal = false">Ok</button>
+  </div>
+</clr-modal>
+<!-- FINALIZA MODAL CLICK MES POR ANIO -->
+
+<!-- COMIENZO MODAL CLICK DETALLE POR MES -->
+<clr-modal [(clrModalOpen)]="detalleXMesModal" [clrModalSize]="'lg'">
+  <h3 class="modal-title">Detalle Categoria</h3>
+  <div class="modal-body">
+
+    <clr-datagrid>
+      <clr-dg-column>Descripcion Gasto </clr-dg-column>
+      <clr-dg-column>Categoria Gasto</clr-dg-column>
+      <clr-dg-column>Fecha Gasto</clr-dg-column>
+      <clr-dg-column>Costo</clr-dg-column>
+
+      <clr-dg-row *ngFor="let detCat of getDetalleXMes  ">
+        <clr-dg-cell>{{detCat.descripcionGasto}}</clr-dg-cell>
+        <clr-dg-cell>{{detCat.categoriaGasto}}</clr-dg-cell>
+        <clr-dg-cell>{{detCat.fechaGasto}}</clr-dg-cell>
+        <clr-dg-cell>{{detCat.costo | currency:'GTQ'}}</clr-dg-cell>
+
+      </clr-dg-row>
+
+      <clr-dg-footer>{{ getDetalleXMes.length }} users</clr-dg-footer>
+    </clr-datagrid>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="detalleXMesModal = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="detalleXMesModal = false">Ok</button>
+  </div>
+</clr-modal>
+<!-- FINALIZA MODAL CLICK DETALLE POR MES -->
