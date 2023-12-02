@@ -2,18 +2,25 @@
 <button class="btn btn-outline" (click)="nuevoGastoModal = true">Agregar Gasto</button>
 
 <clr-modal [(clrModalOpen)]="nuevoGastoModal">
-  <h3 class="modal-title">No "x" in the top-right corner</h3>
+  <h3 class="modal-title">Agregar Gasto</h3>
   <div class="modal-body">
     <form clrForm>
       <!-- PRIMER BLOQUE FORMULARIO AGREGAR -->
       <div class="clr-row">
         <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
           <!-- INPUT Persona Gasto -->
-          <clr-input-container>
+          <clr-select-container>
+            <label>Persona Gasto</label>
+            <select clrSelect [(ngModel)]="gastoAddModel.personGasto" name="personGasto" style="width: 100%;">
+              <option value="Erick">Erick</option>
+              <option value="Johana">Johana</option>
+            </select>
+          </clr-select-container>
+          <!-- <clr-input-container>
             <label>Persona Gasto</label>
             <input clrInput placeholder="Persona Gasto" name="personGasto" [(ngModel)]="gastoAddModel.personGasto"
               style="width: 100%;" />
-          </clr-input-container>
+          </clr-input-container> -->
         </div>
         <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
           <!-- DATE PICKER Fecha Gasto -->
@@ -36,14 +43,21 @@
         </div>
         <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
           <!-- INPUT Mes Gasto -->
-          <clr-datalist-container>
+          <clr-select-container>
+            <label>Mes Gasto</label>
+            <select clrSelect [(ngModel)]="gastoAddModel.mesGasto" placeholder="Mes Gasto" name="mesGasto"
+              style="width: 100%;">
+              <option *ngFor="let item of mesModel | async" [value]="item.nombreMes">{{item.nombreMes}}</option>
+            </select>
+          </clr-select-container>
+          <!-- <clr-datalist-container>
             <label>Mes Gasto</label>
             <input clrDatalistInput [(ngModel)]="gastoAddModel.mesGasto" placeholder="Mes Gasto" name="mesGasto"
               style="width: 100%;" />
             <datalist>
               <option *ngFor="let item of mesModel | async" [value]="item.nombreMes"></option>
             </datalist>
-          </clr-datalist-container>
+          </clr-datalist-container> -->
         </div>
       </div>
       <!-- TERMINA SEGUNDO BLOQUE FORMULARIO AGREGAR -->
@@ -60,21 +74,20 @@
       <!-- TERMINA TERCER BLOQUE FORMULARIO AGREGAR -->
       <!-- CUARTO BLOQUE FORMULARIO AGREGAR -->
       <div class="clr-row">
-        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+        <div class="clr-col-lg-8 clr-col-md-8 clr-col-8">
           <!-- INPUT Categoria Gasto -->
-          <clr-datalist-container>
-            <label>Categoria Gasto</label>
-            <input clrDatalistInput [(ngModel)]="gastoAddModel.categoriaGasto" placeholder="Categoria Gasto"
-              name="categoriaGasto" style="width: 100%;" />
-            <datalist>
-              <option *ngFor="let item of catModel | async" [value]="item.nombreGasto"></option>
-            </datalist>
-          </clr-datalist-container>
+          <clr-select-container>
+            <label>Categoria</label>
+            <select clrSelect [(ngModel)]="gastoAddModel.categoriaGasto" placeholder="Categoria Gasto"
+              name="categoriaGasto" style="width: 100%;">
+              <option *ngFor="let item of catModel | async" [value]="item.nombreGasto">{{item.nombreGasto}}</option>
+            </select>
+          </clr-select-container>
         </div>
-        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+        <div class="clr-col-lg-4 clr-col-md-4 clr-col-4">
           <!-- INPUT Monto Gasto -->
           <clr-input-container>
-            <label>Monto Gasto</label>
+            <label>Monto</label>
             <input clrInput placeholder="Monto Gasto" name="montoGasto" [(ngModel)]="gastoAddModel.costo" />
           </clr-input-container>
         </div>
@@ -87,7 +100,7 @@
 
 
   <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="addGastoCollection()">Crear</button>
+    <button type="button" class="btn btn-primary" (click)="addGastoCollection()">Crear Gasto</button>
   </div>
 </clr-modal>
 <!-- FIN MODAL AGREGAR NUEVO GASTO -->
@@ -120,27 +133,91 @@
   <h3 class="modal-title">Resumen Mensual</h3>
 
   <div class="modal-body">
-    <div class="clr-row">
-      <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
-        <!-- GRAFICA -->
-        <canvas baseChart class="chart" [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"
-          [plugins]="pieChartPlugins">
-        </canvas>
-      </div>
-      <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
-        <clr-datagrid>
-          <clr-dg-column>Categoria Gasto</clr-dg-column>
-          <clr-dg-column>Suma Gasto</clr-dg-column>
+    <!-- TABS -->
+    <clr-tabs>
+      <clr-tab>
+        <button clrTabLink>Todos</button>
+        <clr-tab-content *clrIfActive>
+          <div class="clr-row">
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <!-- GRAFICA -->
+              <canvas baseChart class="chart" [data]="pieChartData" [type]="pieChartType" [options]="pieChartOptions"
+                [plugins]="pieChartPlugins">
+              </canvas>
+            </div>
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <clr-datagrid>
+                <clr-dg-column>Categoria Gasto</clr-dg-column>
+                <clr-dg-column>Suma Gasto</clr-dg-column>
 
-          <clr-dg-row *ngFor="let mes of sumaPorCategoriaList" (click)="getDetalleCategoriaXMes(mes.nombreCategoria)">
-            <clr-dg-cell>{{mes.nombreCategoria}}</clr-dg-cell>
-            <clr-dg-cell>{{mes.suma | currency:'GTQ'}}</clr-dg-cell>
-          </clr-dg-row>
+                <clr-dg-row *ngFor="let mes of sumaPorCategoriaList"
+                  (click)="mes.suma > 0 ? getDetalleCategoriaXMes(mes.nombreCategoria, '') : null">
+                  <clr-dg-cell>{{mes.nombreCategoria}}</clr-dg-cell>
+                  <clr-dg-cell>{{mes.suma | currency:'GTQ'}}</clr-dg-cell>
+                </clr-dg-row>
 
-          <clr-dg-footer>{{ sumaPorCategoriaList.length }} users</clr-dg-footer>
-        </clr-datagrid>
-      </div>
-    </div>
+                <clr-dg-footer>{{ sumaPorCategoriaList.length }} users</clr-dg-footer>
+              </clr-datagrid>
+            </div>
+          </div>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink>Erick</button>
+        <clr-tab-content *clrIfActive>
+          <div class="clr-row">
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <!-- GRAFICA -->
+              <canvas baseChart class="chart" [data]="pieChartDataErick" [type]="pieChartType"
+                [options]="pieChartOptions" [plugins]="pieChartPlugins">
+              </canvas>
+            </div>
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <clr-datagrid>
+                <clr-dg-column>Categoria Gasto</clr-dg-column>
+                <clr-dg-column>Suma Gasto</clr-dg-column>
+
+                <clr-dg-row *ngFor="let mes of sumaPorCategoriaListErick"
+                  (click)="mes.suma > 0 ? getDetalleCategoriaXMes(mes.nombreCategoria, 'Erick') : null">
+                  <clr-dg-cell>{{mes.nombreCategoria}}</clr-dg-cell>
+                  <clr-dg-cell>{{mes.suma | currency:'GTQ'}}</clr-dg-cell>
+                </clr-dg-row>
+
+                <clr-dg-footer>{{ sumaPorCategoriaListErick.length }} users</clr-dg-footer>
+              </clr-datagrid>
+            </div>
+          </div>
+        </clr-tab-content>
+      </clr-tab>
+      <clr-tab>
+        <button clrTabLink>Johana</button>
+        <clr-tab-content *clrIfActive>
+          <div class="clr-row">
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <!-- GRAFICA -->
+              <canvas baseChart class="chart" [data]="pieChartDataJohana" [type]="pieChartType"
+                [options]="pieChartOptions" [plugins]="pieChartPlugins">
+              </canvas>
+            </div>
+            <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+              <clr-datagrid>
+                <clr-dg-column>Categoria Gasto</clr-dg-column>
+                <clr-dg-column>Suma Gasto</clr-dg-column>
+
+                <clr-dg-row *ngFor="let mes of sumaPorCategoriaListJohana"
+                  (click)="mes.suma > 0 ? getDetalleCategoriaXMes(mes.nombreCategoria, 'Johana') : null">
+                  <clr-dg-cell>{{mes.nombreCategoria}}</clr-dg-cell>
+                  <clr-dg-cell>{{mes.suma | currency:'GTQ'}}</clr-dg-cell>
+                </clr-dg-row>
+
+                <clr-dg-footer>{{ sumaPorCategoriaListJohana.length }} users</clr-dg-footer>
+              </clr-datagrid>
+            </div>
+          </div>
+        </clr-tab-content>
+      </clr-tab>
+    </clr-tabs>
+
 
 
   </div>
@@ -157,20 +234,27 @@
   <div class="modal-body">
 
     <clr-datagrid>
-      <clr-dg-column>Descripcion Gasto </clr-dg-column>
-      <clr-dg-column>Categoria Gasto</clr-dg-column>
-      <clr-dg-column>Fecha Gasto</clr-dg-column>
-      <clr-dg-column>Costo</clr-dg-column>
+      <clr-dg-column [clrDgField]="'descripcionGasto'">Descripcion Gasto </clr-dg-column>
+      <clr-dg-column [clrDgField]="'categoriaGasto'">Categoria Gasto</clr-dg-column>
+      <clr-dg-column [clrDgField]="'fechaGasto'">Fecha Gasto</clr-dg-column>
+      <clr-dg-column [clrDgField]="'costo'">Costo</clr-dg-column>
+      <clr-dg-column [clrDgField]="'personGasto'">Persona Gasto</clr-dg-column>
 
-      <clr-dg-row *ngFor="let detCat of getDetalleXMes  ">
+      <clr-dg-row *clrDgItems="let detCat of getDetalleXMes  ">
         <clr-dg-cell>{{detCat.descripcionGasto}}</clr-dg-cell>
         <clr-dg-cell>{{detCat.categoriaGasto}}</clr-dg-cell>
-        <clr-dg-cell>{{detCat.fechaGasto}}</clr-dg-cell>
+        <clr-dg-cell>{{detCat.fechaGasto | formatDate}}</clr-dg-cell>
         <clr-dg-cell>{{detCat.costo | currency:'GTQ'}}</clr-dg-cell>
+        <clr-dg-cell>{{detCat.personGasto}}</clr-dg-cell>
 
       </clr-dg-row>
 
-      <clr-dg-footer>{{ getDetalleXMes.length }} users</clr-dg-footer>
+      <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+          <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Gastos por pagina</clr-dg-page-size>
+          {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} Gastos
+        </clr-dg-pagination>
+      </clr-dg-footer>
     </clr-datagrid>
   </div>
   <div class="modal-footer">

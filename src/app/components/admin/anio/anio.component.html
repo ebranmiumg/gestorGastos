@@ -2,7 +2,7 @@
 <button class="btn btn-outline" (click)="crearModal = true">Crear Año</button>
 
 <clr-modal [(clrModalOpen)]="crearModal">
-  <h3 class="modal-title">No "x" in the top-right corner</h3>
+  <h3 class="modal-title">Agregar Año</h3>
   <div class="modal-body">
     <form clrForm>
       <!-- INPUT numero anio -->
@@ -19,17 +19,20 @@
 <!-- FINAL MODAL CREAR ANIO -->
 
 <div class="clr-row">
-  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let item of anioModel | async">
-    <div class="card">
-      <h3 class="card-header">{{item.numeroAnio}}</h3>
-      <div class="card-block">
-        <h4 class="card-title"></h4>
-        <div class="card-text">...</div>
-      </div>
-      <div class="card-footer">
-        <button class="btn btn-sm btn-link">Footer Action 1</button>
-        <button class="btn btn-sm btn-link">Footer Action 2</button>
-      </div>
-    </div>
+  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" >
+    <clr-datagrid>
+      <clr-dg-column [clrDgField]="'numeroAnio'">Numero año</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let item of (anioModel | async) ?? []">
+        <clr-dg-cell>{{item.numeroAnio}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="10">
+          <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Años por pagina</clr-dg-page-size>
+          {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} años
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
   </div>
 </div>

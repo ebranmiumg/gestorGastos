@@ -7,7 +7,7 @@ import { CategoriaComponent } from './components/admin/categoria/categoria.compo
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
-  {path: '', redirectTo: 'home', pathMatch: 'full'},
+  { path: '', redirectTo: 'home', pathMatch: 'full'},
   { path: 'admin', children: [
     { path: 'anio', component: AnioComponent },
     { path: 'mes', component: MesComponent },

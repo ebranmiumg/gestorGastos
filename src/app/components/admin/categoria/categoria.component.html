@@ -23,17 +23,22 @@
 <!-- FINAL MODAL CREAR CATEGORIA -->
 
 <div class="clr-row">
-  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let item of catModel | async">
-    <div class="card">
-      <h3 class="card-header">{{item.nombreGasto}}</h3>
-      <div class="card-block">
-        <!-- <h4 class="card-title">{{item.nombreMes}}</h4> -->
-        <!-- <div class="card-text">...</div> -->
-      </div>
-      <!-- <div class="card-footer">
-        <button class="btn btn-sm btn-link">Footer Action 1</button>
-        <button class="btn btn-sm btn-link">Footer Action 2</button>
-      </div> -->
-    </div>
+  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" >
+    <clr-datagrid>
+      <clr-dg-column [clrDgField]="'nombreGasto'">Nombre Categoria</clr-dg-column>
+      <clr-dg-column [clrDgField]="'orden'">Orden Categoria</clr-dg-column>
+
+      <clr-dg-row *clrDgItems="let item of (catModel | async) ?? []">
+        <clr-dg-cell>{{item.nombreGasto}}</clr-dg-cell>
+        <clr-dg-cell>{{item.orden}}</clr-dg-cell>
+      </clr-dg-row>
+
+      <clr-dg-footer>
+        <clr-dg-pagination #pagination [clrDgPageSize]="20">
+          <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Categorias por pagina</clr-dg-page-size>
+          {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} categorias
+        </clr-dg-pagination>
+      </clr-dg-footer>
+    </clr-datagrid>
   </div>
 </div>

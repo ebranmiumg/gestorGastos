@@ -15,16 +15,16 @@
   <nav class="subnav">
     <ul class="nav">
       <li class="nav-item">
-        <a class="nav-link active" routerLink="">Home</a>
+        <a class="nav-link" routerLink="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="admin/anio">Año</a>
+        <a class="nav-link" routerLink="admin/anio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Año</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="admin/mes">Mes</a>
+        <a class="nav-link" routerLink="admin/mes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Mes</a>
       </li>
       <li class="nav-item">
-        <a class="nav-link" routerLink="admin/categoria">Categoria</a>
+        <a class="nav-link" routerLink="admin/categoria" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Categoria</a>
       </li>
     </ul>
   </nav>
@@ -32,14 +32,5 @@
     <div class="content-area">
       <router-outlet></router-outlet>
     </div>
- <!--    <clr-vertical-nav>
-      <a clrVerticalNavLink routerLink="">Home</a>
-      <a clrVerticalNavLink routerLink="admin/anio">Año</a>
-      <a clrVerticalNavLink routerLink="admin/mes">Mes</a>
-      <a clrVerticalNavLink routerLink="admin/categoria" class="active">Categoria</a>
-
-      <a clrVerticalNavLink>Link 5</a>
-      <a clrVerticalNavLink>Link 6</a>
-    </clr-vertical-nav> -->
   </div>
 </div>

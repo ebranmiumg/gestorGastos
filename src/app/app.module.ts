@@ -17,6 +17,7 @@ import { CommonModule } from '@angular/common';
 import { CategoriaComponent } from './components/admin/categoria/categoria.component';
 
 import { NgChartsModule } from 'ng2-charts';
+import { FormatDatePipe } from './pipes/format-date.pipe';
 
 
 @NgModule({
@@ -27,7 +28,8 @@ import { NgChartsModule } from 'ng2-charts';
     HomeComponent,
     AnioComponent,
     MesComponent,
-    CategoriaComponent
+    CategoriaComponent,
+    FormatDatePipe
   ],
   imports: [
     BrowserModule,

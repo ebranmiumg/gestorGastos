@@ -1,5 +1,5 @@
 import { Component, inject } from '@angular/core';
-import { DocumentReference, Firestore, addDoc, collection, collectionData,  } from '@angular/fire/firestore';
+import { DocumentReference, Firestore, addDoc, collection, collectionData, orderBy, query,  } from '@angular/fire/firestore';
 import { Observable } from 'rxjs';
 import { Anio } from 'src/app/models/anio.model';
 
@@ -19,7 +19,7 @@ export class AnioComponent {
   crearModal = false;
 
   constructor(){
-    const anioColllection = collection(this.firestore, 'anio');
+    const anioColllection = query(collection(this.firestore, 'anio'), orderBy('numeroAnio','asc'));
     this.anioModel = collectionData(anioColllection) as Observable<Anio[]>;
   }
 
