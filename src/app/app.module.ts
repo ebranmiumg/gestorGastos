@@ -11,13 +11,14 @@ import { initializeApp, provideFirebaseApp } from '@angular/fire/app';
 import { getFirestore, provideFirestore } from '@angular/fire/firestore';
 import { AnioComponent } from './components/admin/anio/anio.component';
 import { MesComponent } from './components/admin/mes/mes.component';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
 import { CategoriaComponent } from './components/admin/categoria/categoria.component';
 
 import { NgChartsModule } from 'ng2-charts';
 import { FormatDatePipe } from './pipes/format-date.pipe';
+import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 
 
 @NgModule({
@@ -29,7 +30,8 @@ import { FormatDatePipe } from './pipes/format-date.pipe';
     AnioComponent,
     MesComponent,
     CategoriaComponent,
-    FormatDatePipe
+    FormatDatePipe,
+    PresupuestoComponent
   ],
   imports: [
     BrowserModule,
@@ -40,7 +42,8 @@ import { FormatDatePipe } from './pipes/format-date.pipe';
     FormsModule,
     BrowserAnimationsModule,
     CommonModule,
-    NgChartsModule
+    NgChartsModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -4,9 +4,11 @@ import { HomeComponent } from './components/home/home.component';
 import { AnioComponent } from './components/admin/anio/anio.component';
 import { MesComponent } from './components/admin/mes/mes.component';
 import { CategoriaComponent } from './components/admin/categoria/categoria.component';
+import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'presupuesto', component: PresupuestoComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   { path: 'admin', children: [
     { path: 'anio', component: AnioComponent },

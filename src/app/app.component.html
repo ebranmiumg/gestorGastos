@@ -1,4 +1,4 @@
-<div class="main-container">
+<!-- <div class="main-container">
   <header class="header-6">
     <div class="branding">
       <a href="javascript://">
@@ -26,6 +26,9 @@
       <li class="nav-item">
         <a class="nav-link" routerLink="admin/categoria" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Categoria</a>
       </li>
+      <li class="nav-item">
+        <a class="nav-link" routerLink="admin/presupuesto" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Presupuesto</a>
+      </li>
     </ul>
   </nav>
   <div class="content-container">
@@ -33,4 +36,43 @@
       <router-outlet></router-outlet>
     </div>
   </div>
-</div>
+</div> -->
+<clr-main-container>
+  <clr-header>
+    <div class="branding">
+      <a class="nav-link logo-and-title">
+        <img src="assets/logo_gastos-removebg-preview.png" class="header-logo clarity-logo">
+        <span class="title">Control Gastos</span>
+      </a>
+    </div>
+   <!--  <div class="header-nav" [clr-nav-level]="1">
+
+    </div> -->
+  </clr-header>
+  <div class="content-container">
+    <main class="content-area">
+      <router-outlet></router-outlet>
+    </main>
+    <clr-vertical-nav [clr-nav-level]="1" [clrVerticalNavCollapsible]="true" [(clrVerticalNavCollapsed)]="collapsed">
+
+      <a clrVerticalNavLink routerLink="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <cds-icon clrVerticalNavIcon shape="home"></cds-icon> Home
+      </a>
+
+      <a clrVerticalNavLink routerLink="presupuesto" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <cds-icon clrVerticalNavIcon shape="dollar-bill"></cds-icon> Presupuesto
+      </a>
+
+      <clr-vertical-nav-group routerLinkActive="active">
+        <a hidden aria-hidden="true"></a>
+        <cds-icon shape="administrator" clrVerticalNavIcon></cds-icon> Admin
+        <clr-vertical-nav-group-children *clrIfExpanded>
+          <a clrVerticalNavLink routerLink="admin/anio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Año</a>
+          <a clrVerticalNavLink routerLink="admin/mes" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">Mes</a>
+          <a clrVerticalNavLink routerLink="admin/categoria" routerLinkActive="active"[routerLinkActiveOptions]="{exact: true}">Categoria</a>
+        </clr-vertical-nav-group-children>
+      </clr-vertical-nav-group>
+
+    </clr-vertical-nav>
+  </div>
+</clr-main-container>

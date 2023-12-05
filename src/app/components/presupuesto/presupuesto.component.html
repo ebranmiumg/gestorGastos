@@ -1,0 +1,169 @@
+<!-- MODAL CREAR PRESUPUESTO -->
+<button class="btn btn-outline" (click)="abrirModalPresupuesto()">Crear Presupuesto</button>
+
+<clr-modal [(clrModalOpen)]="crearPresupuesto" [clrModalSize]="'xl'">
+
+  <h3 class="modal-title">Agregar Presupuesto</h3>
+  <div class="modal-body">
+    <clr-alert *ngIf="showAlertaFormulario" [clrAlertType]="'danger'" [clrAlertClosable]="false">
+      <clr-alert-item>
+        <span class="alert-text">Debes rellenar los campos obligatorios.</span>
+      </clr-alert-item>
+    </clr-alert>
+    <form clrForm [formGroup]="presupuestoForm" (ngSubmit)="agregarPresupuesto(presupuestoForm.value)">
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <clr-select-container>
+            <label>Persona</label>
+            <select clrSelect placeholder="Nombre de la persona" formControlName="personaPresupuesto"
+              style="width: 100%;">
+              <option value="Erick">Erick</option>
+              <option value="Johana">Johana</option>
+            </select>
+          </clr-select-container>
+        </div>
+      </div>
+
+
+      <div class="clr-row">
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <clr-input-container>
+            <label>Año</label>
+            <input clrInput placeholder="Año" formControlName="anioPresupuesto" style="width: 100%;" />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <clr-select-container>
+            <label>Mes </label>
+            <select clrSelect placeholder="Mes" formControlName="mesPresupuesto" style="width: 100%;">
+              <option *ngFor="let item of mesModel | async" [value]="item.nombreMes">{{item.nombreMes}}</option>
+            </select>
+          </clr-select-container>
+        </div>
+      </div>
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <clr-textarea-container>
+            <label>Descripcion</label>
+            <textarea clrTextarea placeholder="Descripción" formControlName="descripcionPresupuesto"
+              style="width: 100%;" required></textarea>
+          </clr-textarea-container>
+        </div>
+      </div>
+
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <div class="card" *ngIf="elementosPresupuesto.controls.length > 0">
+            <h3 class="card-header">Campos del presupuesto</h3>
+            <div class="card-block">
+              <div class="clr-row">
+                <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+                  <div formArrayName="elementosPresupuesto">
+                    <div *ngFor="let elemento of elementosPresupuesto.controls; let i = index" [formGroupName]="i">
+                      <div class="clr-row">
+                        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+                          <clr-input-container>
+                            <label>Nombre</label>
+                            <input clrInput placeholder="Nombre del elemento" formControlName="nombreElemento"
+                              style="width: 100%;" />
+                          </clr-input-container>
+                        </div>
+                        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+                          <clr-input-container>
+                            <label>Monto</label>
+                            <input clrInput type="number" placeholder="Monto del elemento"
+                              formControlName="montoElemento" style="width: 100%;" />
+                          </clr-input-container>
+
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="clr-row clr-justify-content-end">
+                <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+                  <clr-input-container>
+                    <label>Total Monto</label>
+                    <input clrInput type="number" placeholder="Monto total" formControlName="monto"
+                      style="width: 100%;" />
+                  </clr-input-container>
+                </div>
+              </div>
+
+            </div>
+          </div>
+        </div>
+      </div>
+      <button type="button" class="btn btn-primary" (click)="agregarElementoPresupuesto()">Agregar Elemento</button>
+
+      <div class="modal-footer">
+        <button type="submit" class="btn btn-primary">Crear</button>
+      </div>
+
+
+    </form>
+  </div>
+
+</clr-modal>
+<!-- FINAL MODAL CREAR ANIO -->
+
+
+<clr-accordion>
+  <clr-accordion-panel *ngFor="let anio of anioModel | async" (click)="getPrespuestoAnio(anio.numeroAnio)">
+    <clr-accordion-title>{{anio.numeroAnio}}</clr-accordion-title>
+    <clr-accordion-content *clrIfExpanded>
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let presup of getPresupuestoXAnio; let i = index">
+          <a class="card clickable"
+            (click)="presup.elementosPresupuesto.length > 0 ? presupuestoSelected(presup) : null">
+            <h3 class="card-header">{{presup.mesPresupuesto}} - {{presup.personaPresupuesto}}</h3>
+            <div class="card-block">
+              <div class="card-text">{{presup.descripcionPresupuesto}}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </clr-accordion-content>
+  </clr-accordion-panel>
+</clr-accordion>
+
+<!-- COMIENZO MODAL CLICK DETALLE POR MES -->
+<clr-modal [(clrModalOpen)]="detallePresupuestoXMes" [clrModalSize]="'xl'">
+  <h3 class="modal-title">Detalle Presupuesto</h3>
+  <div class="modal-body">
+    <div class="clr-row">
+      <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+        <h2>{{getPresupuestoSelected.mesPresupuesto}} - {{ getPresupuestoSelected.personaPresupuesto }}</h2>
+        <p cds-text="message disable-lhe">
+          {{getPresupuestoSelected.descripcionPresupuesto}}
+        </p>
+        <table class="table table-noborder">
+          <thead>
+            <tr>
+              <th>Descripcion</th>
+              <th>Monto</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of getPresupuestoSelected.elementosPresupuesto">
+              <td>{{item.nombreElemento}}</td>
+              <td>{{item.montoElemento | currency:'GTQ'}}</td>
+            </tr>
+            <tr>
+              <th style="font-weight: bold;">TOTAL</th>
+              <th>{{getPresupuestoSelected.monto | currency:'GTQ'}}</th>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-outline" (click)="detallePresupuestoXMes = false">Cancel</button>
+    <button type="button" class="btn btn-primary" (click)="detallePresupuestoXMes = false">Ok</button>
+  </div>
+</clr-modal>
+<!-- FINALIZA MODAL CLICK DETALLE POR MES -->
