@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Auth, signOut } from '@angular/fire/auth';
+import { Auth, onAuthStateChanged, signOut } from '@angular/fire/auth';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
 
 @Injectable({
@@ -9,15 +9,25 @@ export class AuthService {
   public userName: string | null = null;
   public userUID: string | null = null;
 
-  constructor(private auth: Auth) { }
+  constructor(private auth: Auth) { 
+    onAuthStateChanged(this.auth, (user) => {
+      if (user) {
+        // Usuario está logueado
+        this.userName = user.displayName;
+        this.userUID = user.uid;
+      } else {
+        // Usuario no está logueado
+        this.userName = null;
+        this.userUID = null;
+      }
+    });
+  }
 
 
   async loginWithGoogle() {
     try {
       const result = await signInWithPopup(this.auth, new GoogleAuthProvider());
-      this.userName = result.user.displayName;
-      this.userUID = result.user.uid;
-      console.log(this.userUID);
+      console.log(result);
 
       // Aquí manejas el resultado del inicio de sesión.
     } catch (error) {

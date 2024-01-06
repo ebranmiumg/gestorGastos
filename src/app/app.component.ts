@@ -4,7 +4,7 @@ import { AuthService } from './services/auth.service';
 import { Router } from '@angular/router';
 
 // AGREGAR ICONOS
-ClarityIcons.addIcons(userIcon, homeIcon, dollarBillIcon, administratorIcon, piggyBankIcon);
+ClarityIcons.addIcons(userIcon, homeIcon, dollarBillIcon, administratorIcon, piggyBankIcon,cogIcon);
 
 @Component({
   selector: 'app-root',
@@ -14,8 +14,15 @@ ClarityIcons.addIcons(userIcon, homeIcon, dollarBillIcon, administratorIcon, pig
 export class AppComponent {
   title = 'GestorGastos2023';
   collapsed = true;
+  nombreUsuario:string | null = '';
 
-  constructor(private authService: AuthService, private _router: Router) {}
+  constructor(public authService: AuthService, private _router: Router) {
+    this.nombreUsuario = this.authService.userName;
+  }
+
+  ngOnInit(){
+    console.log(this.authService.userName);    
+  }
 
   toggleNav() {
     this.collapsed = !this.collapsed;
@@ -23,7 +30,7 @@ export class AppComponent {
 
   logout() {
     this.authService.logout().then(() => {
-      this._router.navigate(['/login']); // Redirige después del cierre de sesión
+      this._router.navigate(['/login']); 
     });
   }
 }

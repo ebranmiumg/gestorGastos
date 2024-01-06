@@ -1,5 +1,10 @@
 import { Component } from '@angular/core';
+import { Router } from '@angular/router';
+import { ClarityIcons, cogIcon } from '@cds/core/icon';
 import { AuthService } from 'src/app/services/auth.service';
+
+// AGREGAR ICONOS
+ClarityIcons.addIcons(cogIcon);
 
 @Component({
   selector: 'app-login',
@@ -8,10 +13,12 @@ import { AuthService } from 'src/app/services/auth.service';
 })
 export class LoginComponent {
 
-  constructor(private authService: AuthService) {}
+  constructor(private authService: AuthService, private _router: Router) {}
 
   login() {
-    this.authService.loginWithGoogle();
+    this.authService.loginWithGoogle().then(()=> {
+      this._router.navigate(['/home']);
+    })
   }
 
 }

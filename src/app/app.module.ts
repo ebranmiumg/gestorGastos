@@ -24,6 +24,8 @@ import { FormatDatePipe } from './pipes/format-date.pipe';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
 import { IngresosComponent } from './components/ingresos/ingresos.component';
 import { LoginComponent } from './components/login/login.component';
+import { GastosComponent } from './components/gastos/gastos.component';
+import { GruposComponent } from './components/admin/grupos/grupos.component';
 
 
 @NgModule({
@@ -38,7 +40,9 @@ import { LoginComponent } from './components/login/login.component';
     FormatDatePipe,
     PresupuestoComponent,
     IngresosComponent,
-    LoginComponent
+    LoginComponent,
+    GastosComponent,
+    GruposComponent
   ],
   imports: [
     BrowserModule,
