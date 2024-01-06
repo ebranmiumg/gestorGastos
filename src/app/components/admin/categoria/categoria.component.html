@@ -14,6 +14,13 @@
         <label>Orden</label>
         <input clrInput placeholder="Orden" name="orden" [(ngModel)]="catAddModel.orden" style="width: 100%;"/>
       </clr-input-container>
+      <clr-select-container>
+        <label>Tipo Categoria</label>
+        <select clrSelect [(ngModel)]="catAddModel.tipoCategoria" name="tipoCategoria" style="width: 100%;">
+          <option value="Ingreso">Ingreso</option>
+          <option value="Gasto">Gasto</option>
+        </select>
+      </clr-select-container>
     </form>
   </div>
   <div class="modal-footer">
@@ -27,10 +34,14 @@
     <clr-datagrid>
       <clr-dg-column [clrDgField]="'nombreGasto'">Nombre Categoria</clr-dg-column>
       <clr-dg-column [clrDgField]="'orden'">Orden Categoria</clr-dg-column>
+      <clr-dg-column [clrDgField]="'tipoCategoria'">Tipo Categoria</clr-dg-column>
+
 
       <clr-dg-row *clrDgItems="let item of (catModel | async) ?? []">
         <clr-dg-cell>{{item.nombreGasto}}</clr-dg-cell>
         <clr-dg-cell>{{item.orden}}</clr-dg-cell>
+        <clr-dg-cell>{{item.tipoCategoria}}</clr-dg-cell>
+
       </clr-dg-row>
 
       <clr-dg-footer>

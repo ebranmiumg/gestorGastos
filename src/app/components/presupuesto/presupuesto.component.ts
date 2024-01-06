@@ -14,6 +14,9 @@ import { Observable } from 'rxjs';
 import { Anio } from 'src/app/models/anio.model';
 import { Mes } from 'src/app/models/mes.model';
 import { Presupuesto } from 'src/app/models/prespuesto.model';
+import { ClarityIcons,  windowCloseIcon} from '@cds/core/icon';
+
+ClarityIcons.addIcons(windowCloseIcon);
 
 @Component({
   selector: 'app-presupuesto',
@@ -74,26 +77,63 @@ export class PresupuestoComponent {
         Validators.required,
       ],
       mesPresupuesto: ['', Validators.required],
-      categoriaPresupuesto: ['', Validators.required],
       descripcionPresupuesto: ['', Validators.required],
       monto: [{ value: 0, disabled: true }, Validators.required],
       elementosPresupuesto: this.fb.array([]),
     });
+
   }
 
   get elementosPresupuesto() {
     return this.presupuestoForm.get('elementosPresupuesto') as FormArray;
   }
 
+
   abrirModalPresupuesto() {
     this.crearPresupuesto = true;
     this.showAlertaFormulario = false;
-    this.presupuestoForm.reset(); // Esto resetea el formulario
+     // Valores a establecer cuando se resetea el formulario
+    const valoresInicialesFormulario = {
+      personaPresupuesto: '',
+      anioPresupuesto: this.fechaActual.getFullYear().toString(),
+      mesPresupuesto: '',
+      categoriaPresupuesto: '',
+      descripcionPresupuesto: '',
+      monto: 0,
+      elementosPresupuesto: []
+    };
+
+    this.presupuestoForm.reset(valoresInicialesFormulario);
+
+    // Opcionalmente, si necesitas mantener el campo año como deshabilitado
+    const anioPresupuestoControl = this.presupuestoForm.get('anioPresupuesto');
+    if (anioPresupuestoControl) {
+      anioPresupuestoControl.disable();
+    }
+
+    // Limpiar la FormArray de elementosPresupuesto
+    while (this.elementosPresupuesto.length !== 0) {
+      this.elementosPresupuesto.removeAt(0);
+    }
+
+    // Actualizar el monto total después de limpiar los elementos
+    this.actualizarMontoTotal();
   }
 
+   presupuestoSelected(vPrespSelec: Presupuesto) {
+    this.getPresupuestoSelected = {
+      descripcionPresupuesto: '',
+      anioPresupuesto: '',
+      categoriaPresupuesto: '',
+      elementosPresupuesto: [],
+      mesPresupuesto: '',
+      monto: 0,
+      personaPresupuesto: '',
+    };
 
-
-
+    this.getPresupuestoSelected = vPrespSelec;
+    this.detallePresupuestoXMes = true;
+  }
 
   agregarElementoPresupuesto() {
     const elementoPresupuesto = this.fb.group({
@@ -103,6 +143,10 @@ export class PresupuestoComponent {
 
     this.subscribirACambiosDeMonto(elementoPresupuesto);
     this.elementosPresupuesto.push(elementoPresupuesto);
+  }
+
+  eliminarElementoPresupuesto(indice: number) {
+    this.elementosPresupuesto.removeAt(indice);
   }
 
   private subscribirACambiosDeMonto(elementoPresupuesto: FormGroup) {
@@ -126,9 +170,10 @@ export class PresupuestoComponent {
     }
   }
 
-  async agregarPresupuesto(presupuesto: any) {
+  async agregarPresupuesto() {
     try {
       if (this.presupuestoForm.valid) {
+        const presupuesto = this.presupuestoForm.getRawValue();
         this.showAlertaFormulario = false;
         let sumaTotal = 0;
         presupuesto.elementosPresupuesto.map((item: any) => {
@@ -168,18 +213,5 @@ export class PresupuestoComponent {
     this.getPresupuestoXAnio = prespuestos;
   }
 
-  presupuestoSelected(vPrespSelec: Presupuesto) {
-    this.getPresupuestoSelected = {
-      descripcionPresupuesto: '',
-      anioPresupuesto: '',
-      categoriaPresupuesto: '',
-      elementosPresupuesto: [],
-      mesPresupuesto: '',
-      monto: 0,
-      personaPresupuesto: '',
-    };
 
-    this.getPresupuestoSelected = vPrespSelec;
-    this.detallePresupuestoXMes = true;
-  }
 }

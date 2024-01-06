@@ -1,48 +1,24 @@
-<!-- <div class="main-container">
-  <header class="header-6">
-    <div class="branding">
-      <a href="javascript://">
-        <cds-icon shape="vm-bug"></cds-icon>
-        <span class="title">Project Clarity</span>
-      </a>
-    </div>
-    <div class="settings">
-      <a href="javascript://" class="nav-link nav-icon">
-        <cds-icon shape="cog"></cds-icon>
-      </a>
-    </div>
-  </header>
-  <nav class="subnav">
-    <ul class="nav">
-      <li class="nav-item">
-        <a class="nav-link" routerLink="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Home</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="admin/anio" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Año</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="admin/mes" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Mes</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="admin/categoria" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Categoria</a>
-      </li>
-      <li class="nav-item">
-        <a class="nav-link" routerLink="admin/presupuesto" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">Presupuesto</a>
-      </li>
-    </ul>
-  </nav>
-  <div class="content-container">
-    <div class="content-area">
-      <router-outlet></router-outlet>
-    </div>
-  </div>
-</div> -->
+
 <clr-main-container>
-  <clr-header>
+  <clr-header >
     <div class="branding">
       <a class="nav-link logo-and-title">
         <img src="assets/logo_gastos-removebg-preview.png" class="header-logo clarity-logo">
         <span class="title">Control Gastos</span>
+      </a>
+    </div>
+    <div class="settings">
+      <a href="javascript://" class="nav-link nav-icon">
+        <clr-dropdown [clrCloseMenuOnItemClick]="false">
+          <button clrDropdownTrigger aria-label="Dropdown demo button">
+            <cds-icon shape="cog"></cds-icon>
+            <cds-icon shape="angle" direction="down" status="neutral"></cds-icon>
+          </button>
+          <clr-dropdown-menu clrPosition="bottom-right" *clrIfOpen>
+            <div aria-label="Cerar Sesion" (click)="logout()"  clrDropdownItem>Cerrar Sesion</div>
+          </clr-dropdown-menu>
+        </clr-dropdown>
+
       </a>
     </div>
    <!--  <div class="header-nav" [clr-nav-level]="1">
@@ -57,6 +33,10 @@
 
       <a clrVerticalNavLink routerLink="home" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
         <cds-icon clrVerticalNavIcon shape="home"></cds-icon> Home
+      </a>
+
+      <a clrVerticalNavLink routerLink="ingreso" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">
+        <cds-icon clrVerticalNavIcon shape="piggy-bank"></cds-icon> Ingresos
       </a>
 
       <a clrVerticalNavLink routerLink="presupuesto" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}">

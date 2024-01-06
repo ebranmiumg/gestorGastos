@@ -14,11 +14,16 @@ import { MesComponent } from './components/admin/mes/mes.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { CommonModule } from '@angular/common';
+import { provideAuth,getAuth } from '@angular/fire/auth';
+
+
 import { CategoriaComponent } from './components/admin/categoria/categoria.component';
 
 import { NgChartsModule } from 'ng2-charts';
 import { FormatDatePipe } from './pipes/format-date.pipe';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
+import { IngresosComponent } from './components/ingresos/ingresos.component';
+import { LoginComponent } from './components/login/login.component';
 
 
 @NgModule({
@@ -31,7 +36,9 @@ import { PresupuestoComponent } from './components/presupuesto/presupuesto.compo
     MesComponent,
     CategoriaComponent,
     FormatDatePipe,
-    PresupuestoComponent
+    PresupuestoComponent,
+    IngresosComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -39,6 +46,7 @@ import { PresupuestoComponent } from './components/presupuesto/presupuesto.compo
     ClarityModule,
     provideFirebaseApp(() => initializeApp({"projectId":"gestorgastos2023-c2f31","appId":"1:11084712502:web:0c2081eae98cabb9dd6697","storageBucket":"gestorgastos2023-c2f31.appspot.com","apiKey":"AIzaSyAgy7tgZNNpjKpZl7W_GlqHDpqTDjnbaaw","authDomain":"gestorgastos2023-c2f31.firebaseapp.com","messagingSenderId":"11084712502"})),
     provideFirestore(() => getFirestore()),
+    provideAuth(() => getAuth()),
     FormsModule,
     BrowserAnimationsModule,
     CommonModule,

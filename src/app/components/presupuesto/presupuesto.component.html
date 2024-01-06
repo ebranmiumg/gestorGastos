@@ -10,7 +10,7 @@
         <span class="alert-text">Debes rellenar los campos obligatorios.</span>
       </clr-alert-item>
     </clr-alert>
-    <form clrForm [formGroup]="presupuestoForm" (ngSubmit)="agregarPresupuesto(presupuestoForm.value)">
+    <form clrForm [formGroup]="presupuestoForm" (ngSubmit)="agregarPresupuesto()">
       <div class="clr-row">
         <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
           <clr-select-container>
@@ -61,7 +61,7 @@
                   <div formArrayName="elementosPresupuesto">
                     <div *ngFor="let elemento of elementosPresupuesto.controls; let i = index" [formGroupName]="i">
                       <div class="clr-row">
-                        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+                        <div class="clr-col-lg-5 clr-col-md-5 clr-col-5">
                           <clr-input-container>
                             <label>Nombre</label>
                             <input clrInput placeholder="Nombre del elemento" formControlName="nombreElemento"
@@ -72,9 +72,13 @@
                           <clr-input-container>
                             <label>Monto</label>
                             <input clrInput type="number" placeholder="Monto del elemento"
-                              formControlName="montoElemento" style="width: 100%;" />
+                              formControlName="montoElemento" style="width: 100%" />
                           </clr-input-container>
-
+                        </div>
+                        <div class="clr-col-lg-1 clr-col-md-1 clr-col-1 clr-align-self-end" >
+                          <button type="button" class="btn btn-link btn-icon" (click)="eliminarElementoPresupuesto(i)">
+                            <cds-icon shape="window-close" style="color: red;"></cds-icon>
+                          </button>
                         </div>
                       </div>
                     </div>
@@ -90,6 +94,7 @@
                       style="width: 100%;" />
                   </clr-input-container>
                 </div>
+                <div class="clr-col-lg-1 clr-col-md-1 clr-col-1"></div>
               </div>
 
             </div>

@@ -19,7 +19,7 @@ import { Categoria } from 'src/app/models/categoria.model';
 export class CategoriaComponent {
   //CONFIGUARCION FIREBASE
   private firestore: Firestore = inject(Firestore);
-  catAddModel: Categoria = { nombreGasto: '' ,orden: 0 };
+  catAddModel: Categoria = { nombreGasto: '' ,orden: 0, tipoCategoria: '', usuario: '' };
 
   catModel: Observable<Categoria[]>;
 
@@ -35,7 +35,7 @@ export class CategoriaComponent {
     addDoc(collection(this.firestore, 'Categoria'), this.catAddModel).then(
       (documentReference: DocumentReference) => {
         console.log(documentReference);
-        this.catAddModel = { nombreGasto: '' ,orden: 0 };
+        this.catAddModel = { nombreGasto: '' ,orden: 0, tipoCategoria: '', usuario: '' };
 
         this.crearModal = false;
       }

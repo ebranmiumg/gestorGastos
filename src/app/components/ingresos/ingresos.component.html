@@ -1,0 +1,107 @@
+<!-- MODAL AGREGAR NUEVO INGRESO -->
+<button class="btn btn-outline" (click)="nuevoIngresoModal = true">Agregar Ingreso</button>
+
+<clr-modal [(clrModalOpen)]="nuevoIngresoModal">
+  <h3 class="modal-title">Agregar Ingreso</h3>
+  <div class="modal-body">
+    <form clrForm>
+      <!-- PRIMER BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <!-- INPUT Persona Ingreso -->
+          <clr-select-container>
+            <label>Persona Ingreso</label>
+            <select clrSelect [(ngModel)]="ingresoAddModel.personIngreso" name="personIngreso" style="width: 100%;">
+              <option value="Erick">Erick</option>
+              <option value="Johana">Johana</option>
+            </select>
+          </clr-select-container>
+        </div>
+      </div>
+      <!-- TERMINA PRIMER BLOQUE FORMULARIO AGREGAR -->
+      <!-- SEGUNDO BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Anio Ingreso -->
+          <clr-input-container>
+            <label>Año Ingreso</label>
+            <input clrInput placeholder="Año Ingreso" name="anioIngreso" [(ngModel)]="ingresoAddModel.anioIngreso"
+              [disabled]="true" style="width: 100%;" />
+          </clr-input-container>
+        </div>
+        <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
+          <!-- INPUT Mes Ingreso -->
+          <clr-select-container>
+            <label>Mes Ingreso</label>
+            <select clrSelect [(ngModel)]="ingresoAddModel.mesIngreso" placeholder="Mes Ingreso" name="mesIngreso"
+              style="width: 100%;">
+              <option *ngFor="let item of mesModel | async" [value]="item.nombreMes">{{item.nombreMes}}</option>
+            </select>
+          </clr-select-container>
+        </div>
+      </div>
+      <!-- TERMINA SEGUNDO BLOQUE FORMULARIO AGREGAR -->
+      <!-- TERCER BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+          <clr-textarea-container>
+            <label>Descripcion</label>
+            <textarea clrTextarea [(ngModel)]="ingresoAddModel.descripcionIngreso" name="descripcionIngreso"
+              style="width: 100%;" required></textarea>
+          </clr-textarea-container>
+        </div>
+      </div>
+      <!-- TERMINA TERCER BLOQUE FORMULARIO AGREGAR -->
+      <!-- CUARTO BLOQUE FORMULARIO AGREGAR -->
+      <div class="clr-row">
+        <div class="clr-col-lg-7 clr-col-md-7 clr-col-7">
+          <!-- INPUT Categoria Ingreso -->
+          <clr-select-container>
+            <label>Categoria</label>
+            <select clrSelect [(ngModel)]="ingresoAddModel.categoriaIngreso" placeholder="Categoria Ingreso"
+              name="categoriaIngreso" style="width: 100%;">
+              <option *ngFor="let item of catModel | async" [value]="item.nombreGasto">{{item.nombreGasto}}</option>
+            </select>
+          </clr-select-container>
+        </div>
+        <div class="clr-col-lg-5 clr-col-md-5 clr-col-5">
+          <!-- INPUT Monto Ingreso -->
+          <clr-input-container>
+            <label>Monto</label>
+            <input clrInput placeholder="Monto Ingreso" name="montoIngreso" [(ngModel)]="ingresoAddModel.ingreso" />
+          </clr-input-container>
+        </div>
+      </div>
+      <!-- TERMINA CUARTO BLOQUE FORMULARIO AGREGAR -->
+    </form>
+
+
+  </div>
+
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addIngresoCollection()">Crear Ingreso</button>
+  </div>
+</clr-modal>
+<!-- FIN MODAL AGREGAR NUEVO INGRESO -->
+
+<!-- COMIENZO ACCORDION POR AÑO -->
+<clr-accordion>
+  <clr-accordion-panel *ngFor="let item of aniosConMasDeUnIngreso " (click)="getIngresosXAnio(item.numeroAnio)">
+    <clr-accordion-title>{{item.numeroAnio}}</clr-accordion-title>
+    <!-- CONTENIDO DEL ACCORDION -->
+    <clr-accordion-content *clrIfExpanded>
+      <div class="clr-row">
+        <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" *ngFor="let mes of sumByMonth ">
+          <a class="card clickable" >
+            <h3 class="card-header">{{mes.mes}}</h3>
+            <div class="card-block">
+              <div class="card-text">Ingresos en el Mes: Q. {{mes.suma}}</div>
+            </div>
+          </a>
+        </div>
+      </div>
+    </clr-accordion-content>
+  </clr-accordion-panel>
+</clr-accordion>
+<!-- FINAL ACCORDION POR AÑO -->

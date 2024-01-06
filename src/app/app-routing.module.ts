@@ -5,10 +5,14 @@ import { AnioComponent } from './components/admin/anio/anio.component';
 import { MesComponent } from './components/admin/mes/mes.component';
 import { CategoriaComponent } from './components/admin/categoria/categoria.component';
 import { PresupuestoComponent } from './components/presupuesto/presupuesto.component';
+import { IngresosComponent } from './components/ingresos/ingresos.component';
+import { LoginComponent } from './components/login/login.component';
 
 const routes: Routes = [
   { path: 'home', component: HomeComponent },
+  { path: 'login', component: LoginComponent },
   { path: 'presupuesto', component: PresupuestoComponent },
+  { path: 'ingreso', component: IngresosComponent },
   { path: '', redirectTo: 'home', pathMatch: 'full'},
   { path: 'admin', children: [
     { path: 'anio', component: AnioComponent },

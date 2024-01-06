@@ -159,6 +159,7 @@ export class HomeComponent {
     );
     const catColllection = query(
       collection(this.firestore, 'Categoria'),
+      where('tipoCategoria', '==', 'Gasto'),
       orderBy('orden', 'asc')
     );
     const gastoColllection = collection(this.firestore, 'Gasto');
@@ -167,6 +168,9 @@ export class HomeComponent {
     this.mesModel = collectionData(mesColllection) as Observable<Mes[]>;
     this.anioModel = collectionData(anioColllection) as Observable<Anio[]>;
     this.gastoModel = collectionData(gastoColllection) as Observable<Gasto[]>;
+
+    this.catModel.subscribe(gastos => {console.log(gastos);
+    })
     /* this.gastoModel.pipe(
       map(gastos => getSumByMonth(gastos))
     ).subscribe(sumByMonth => {
