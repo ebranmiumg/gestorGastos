@@ -9,8 +9,6 @@
 
 
 <!-- MODAL CREAR Grupo -->
-<button class="btn btn-outline" (click)="crearModal = true">Crear Grupo</button>
-
 <clr-modal [(clrModalOpen)]="crearModal">
   <h3 class="modal-title">Agregar Grupo</h3>
   <div class="modal-body">
@@ -29,44 +27,66 @@
 <!-- FINAL MODAL CREAR ANIO -->
 
 
+<form clrForm>
+  <div class="clr-row clr-justify-content-between">
+    <div class="clr-col-lg-6 clr-col-md-6 clr-col-12">
+      <button class="btn btn-outline" (click)="crearModal = true">Crear Grupo</button>
+    </div>
+    <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
+      
+        <!-- <label for="basic" class="clr-control-label">Unirse Grupo</label>   -->
+        <div class="clr-control-container">
+          <div class="clr-input-wrapper">
+            <input type="text" id="basic" placeholder="Ingresa codigo grupo" #codigoUnicoDirecto class="clr-input" />
+            <cds-icon class="clr-validate-icon" shape="exclamation-circle"></cds-icon>
+            <button type="button" class="btn btn-icon btn-link" aria-label="home" (click)="addGrupoByCode(codigoUnicoDirecto.value)">
+              <cds-icon shape="play" solid="true"></cds-icon>
+            </button>
+          </div>
+          
+        </div>
+      <!-- <input clrInput placeholder="My input" name="input" /> -->
+      
+    </div>
+  </div>
+</form>
+
 <!-- MODAL VER Grupo -->
 <clr-modal [(clrModalOpen)]="verModal">
-  <h3 class="modal-title">Grupo {{ grupoVerModel.nombreGrupo }}</h3>
+  <h3 class="modal-title">{{ grupoVerModel.nombreGrupo }}</h3>
   <div class="modal-body">
-    <form clrForm>
-      <!-- INPUT NOMBRE MES -->
-      <clr-input-container>
-        <label>Nombre Grupo</label>
-        <input clrInput placeholder="Nombre Grupo" name="nombreGrupo" [(ngModel)]="grupoAddModel.nombreGrupo" />
-      </clr-input-container>
-    </form>
-  </div>
-  <div class="modal-footer">
-    <button type="button" class="btn btn-primary" (click)="addGrupoCollection()">Crear</button>
+    <div class="label label-blue" style="float: right;">
+      <span class="text">Codigo</span>
+      <span class="badge">{{grupoVerModel.codigoUnico}}</span>
+    </div>
+    <h2 *ngIf="grupoVerModel.integrantes.length > 0">Integrantes</h2>
+    <ul class="compact" *ngIf="grupoVerModel.integrantes.length > 0">
+      <li *ngFor="let item of grupoVerModel.integrantes">{{item.nombreIntegrante}}</li>
+    </ul>
   </div>
 </clr-modal>
 <!-- FINAL MODAL VER GRUPO -->
 
 
 <div class="clr-row">
-  <div class="clr-col-lg-3 clr-col-md-4 clr-col-12" *ngFor="let item of (grupoModel | async) ?? [] ">
-    <div class="card clickable" (click)="verGrupoCollection(item.codigoUnico)">
+  <div class="clr-col-lg-3 clr-col-md-4 clr-col-12" *ngFor="let item of grupoModel ">
+    <div class="card clickable" (click)="verGrupoCollection(item.id)">
       <h3 class="card-header">
-        {{item.nombreGrupo}}
-        <button type="button" (click)="copyText(item.codigoUnico, $event)" class="btn btn-icon btn-link"
+        {{item.data.nombreGrupo}}
+        <button type="button" (click)="copyText(item.data.codigoUnico, $event)" class="btn btn-icon btn-link"
           aria-label="home" style="float: right;margin: 0px;">
           <cds-icon shape="share"></cds-icon>
         </button>
       </h3>
       <div class="card-block">
-        <div class="card-text">Cantidad de integrantes: {{item.integrantes.length}}</div>
+        <div class="card-text">Cantidad de integrantes: {{item.data.integrantes.length}}</div>
       </div>
     </div>
   </div>
 </div>
 
 
-<div class="clr-row">
+<!-- <div class="clr-row">
   <div class="clr-col-lg-4 clr-col-md-6 clr-col-12">
     <clr-datagrid>
       <clr-dg-column [clrDgField]="'nombreGrupo'">nombre Grupo</clr-dg-column>
@@ -86,8 +106,7 @@
           <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Grupos por pagina</clr-dg-page-size>
           {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} meses
         </clr-dg-pagination>
-        <!-- {{ (mesModel | async)?.length }} users -->
       </clr-dg-footer>
     </clr-datagrid>
   </div>
-</div>
+</div> -->
