@@ -1,0 +1,68 @@
+.loader-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #333; /* O el color de fondo que prefieras */
+}
+
+.loader {
+  color: #FFF;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 48px;
+  letter-spacing: 4px;
+  display: flex; /* Alinea los elementos internos con Flexbox */
+  justify-content: center;
+  align-items: center;
+}
+
+.dot {
+  background: red;
+  border-radius: 50%;
+  width: 10px; /* O el tamaño que prefieras */
+  height: 10px; /* O el tamaño que prefieras */
+  animation: animloader 1s linear infinite alternate;
+  margin-left: -12px; /* Ajusta esta propiedad para mover el punto hacia la izquierda */
+  margin-right: 2px; /* Ajusta esta propiedad para compensar el espacio adicional a la derecha del punto */
+  align-self: flex-start; /* Alinea el punto con la parte superior del texto */
+  position: relative; /* Para ajustes de posición finos */
+  top: -25px; /* Ajusta según el tamaño de la fuente y la altura deseada */
+}
+@keyframes animloader {
+  0% {
+    transform: translate(0px, 0px) scaleX(1);
+  }
+  14% {
+    transform: translate(-12px, -16px) scaleX(1.05);
+  }
+  28% {
+    transform: translate(-27px, -28px) scaleX(1.07);
+  }
+  42% {
+    transform: translate(-46px, -35px) scaleX(1.1);
+  }
+  57% {
+    transform: translate(-70px, -37px) scaleX(1.1);
+  }
+  71% {
+    transform: translate(-94px, -32px) scaleX(1.07);
+  }
+  85% {
+    transform: translate(-111px, -22px) scaleX(1.05);
+  }
+  100% {
+    transform: translate(-125px, -9px) scaleX(1);
+  }
+}
+
+@keyframes animloader1 {
+  0% {
+    box-shadow: 0 -6px, -122.9px -8px;
+  }
+  25%, 75% {
+    box-shadow: 0 0px, -122.9px -8px;
+  }
+  100% {
+    box-shadow: 0 0px, -122.9px -16px;
+  }
+}

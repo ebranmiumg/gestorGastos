@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { HomeComponent } from './components/home/home.component';
 import { LoginComponent } from './components/login/login.component';
 import { AuthGuard } from './guards/auth.guard';
+import { InvitacionComponent } from './components/admin/invitacion/invitacion.component';
 
 const routes: Routes = [
   {
@@ -16,6 +17,10 @@ const routes: Routes = [
     loadChildren: () =>
       import('./components/home/home.module').then((m) => m.HomeModule),
     canActivate: [AuthGuard]
+  },
+  {
+    path: 'invite/:codigo',
+    component: InvitacionComponent,
   },
   { path: '', redirectTo: 'login', pathMatch: 'full' },
   { path: '**', component: LoginComponent },

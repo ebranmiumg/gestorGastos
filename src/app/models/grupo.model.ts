@@ -1,11 +1,11 @@
 export interface Grupo {
-  codigoUnico: number;
+  codigoUnico: String;
   nombreGrupo: String;
   integrantes: IntegrantesGrupo[]
-  uidCreador: String;
+  uidCreador: string | null;
 }
 
 export interface IntegrantesGrupo {
-  uidIntegrante: String;
-  nombreIntegrante: String;
+  uidIntegrante: string | null;
+  nombreIntegrante: string | null;
 }
