@@ -34,6 +34,7 @@ export class InvitacionComponent implements OnInit {
     nombreGrupo: '',
     integrantes: [],
     uidCreador: '',
+    grupoCategoria: '',
   };
   constructor(
     private route: ActivatedRoute,

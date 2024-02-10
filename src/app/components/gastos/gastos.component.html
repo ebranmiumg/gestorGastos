@@ -8,14 +8,23 @@
       <!-- PRIMER BLOQUE FORMULARIO AGREGAR -->
       <div class="clr-row">
         <div class="clr-col-lg-6 clr-col-md-6 clr-col-6">
-          <!-- INPUT Persona Gasto -->
+          <!-- SELECT Grupo Gasto -->
           <clr-select-container>
+            <label>Grupo Gasto</label>
+            <select clrSelect [(ngModel)]="gastoAddModel.grupoGasto" placeholder="Grupo Gasto" name="grupoGasto"
+              style="width: 100%;" (ngModelChange)="getCatXGrupoGasto($event)">
+              <option *ngFor="let item of grupoModel" [value]="item.id">{{item.data.nombreGrupo}}</option>
+            </select>
+          </clr-select-container>
+
+          <!-- INPUT Persona Gasto -->
+<!--           <clr-select-container>
             <label>Persona Gasto</label>
             <select clrSelect [(ngModel)]="gastoAddModel.personGasto" name="personGasto" style="width: 100%;">
               <option value="Erick">Erick</option>
               <option value="Johana">Johana</option>
             </select>
-          </clr-select-container>
+          </clr-select-container> -->
           <!-- <clr-input-container>
             <label>Persona Gasto</label>
             <input clrInput placeholder="Persona Gasto" name="personGasto" [(ngModel)]="gastoAddModel.personGasto"

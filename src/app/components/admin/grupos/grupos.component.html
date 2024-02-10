@@ -16,8 +16,15 @@
       <!-- INPUT NOMBRE MES -->
       <clr-input-container>
         <label>Nombre Grupo</label>
-        <input clrInput placeholder="Nombre Grupo" name="nombreGrupo" [(ngModel)]="grupoAddModel.nombreGrupo" />
+        <input clrInput placeholder="Nombre Grupo" name="nombreGrupo" [(ngModel)]="grupoAddModel.nombreGrupo" style="width: 100%;"/>
       </clr-input-container>
+      <clr-select-container>
+        <label>Grupo de Categorias</label>
+        <select clrSelect [(ngModel)]="grupoAddModel.grupoCategoria" placeholder="Grupo Categoria" name="grupoCategoria"
+          style="width: 100%;">
+          <option *ngFor="let item of grupoCatModel" [value]="item.data.uidCreador">{{item.data.nombreCatGrupo}}</option>
+        </select>
+      </clr-select-container>
     </form>
   </div>
   <div class="modal-footer">
@@ -33,7 +40,7 @@
       <button class="btn btn-outline" (click)="crearModal = true">Crear Grupo</button>
     </div>
     <div class="clr-col-lg-3 clr-col-md-3 clr-col-12">
-      
+
         <!-- <label for="basic" class="clr-control-label">Unirse Grupo</label>   -->
         <div class="clr-control-container">
           <div class="clr-input-wrapper">
@@ -43,10 +50,10 @@
               <cds-icon shape="play" solid="true"></cds-icon>
             </button>
           </div>
-          
+
         </div>
       <!-- <input clrInput placeholder="My input" name="input" /> -->
-      
+
     </div>
   </div>
 </form>

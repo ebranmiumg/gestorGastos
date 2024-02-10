@@ -1,6 +1,62 @@
-<!-- MODAL CREAR CATEGORIA -->
-<button class="btn btn-outline" (click)="crearModal = true">Crear Categoria</button>
+<!-- MODAL VER CATEGORIAS POR GRUPO -->
+<clr-modal [(clrModalOpen)]="verCategoriasXGrupoModal" [clrModalSize]="'xl'">
+  <h3 class="modal-title">Categorias Grupo</h3>
+  <div class="modal-body">
 
+    <button class="btn btn-outline" (click)="crearModal = true">Crear Categoria</button>
+    <div class="clr-row">
+      <div class="clr-col-lg-12 clr-col-md-12 clr-col-12">
+        <clr-datagrid>
+          <clr-dg-column [clrDgField]="'nombreGasto'">Nombre Categoria</clr-dg-column>
+          <clr-dg-column [clrDgField]="'orden'">Orden Categoria</clr-dg-column>
+          <clr-dg-column [clrDgField]="'tipoCategoria'">Tipo Categoria</clr-dg-column>
+          <!-- <clr-dg-column>Usuario</clr-dg-column> -->
+
+
+
+          <clr-dg-row *clrDgItems="let item of catXGrupoModel">
+            <clr-dg-cell>{{item.data.nombreGasto}}</clr-dg-cell>
+            <clr-dg-cell>{{item.data.orden}}</clr-dg-cell>
+            <clr-dg-cell>{{item.data.tipoCategoria}}</clr-dg-cell>
+            <!-- <clr-dg-cell>{{item.data.usuario}}</clr-dg-cell> -->
+
+
+          </clr-dg-row>
+
+          <clr-dg-footer>
+            <clr-dg-pagination #pagination [clrDgPageSize]="20">
+              <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Categorias por pagina</clr-dg-page-size>
+              {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} categorias
+            </clr-dg-pagination>
+          </clr-dg-footer>
+        </clr-datagrid>
+      </div>
+    </div>
+  </div>
+</clr-modal>
+
+<!-- MODAL CREAR CREAR GRUPO CATEGORIAS -->
+<button class="btn btn-outline" (click)="crearGrupoModal = true">Crear Grupo Categoria</button>
+
+<clr-modal [(clrModalOpen)]="crearGrupoModal">
+  <h3 class="modal-title">Agregar Grupo Categoria</h3>
+  <div class="modal-body">
+    <form clrForm>
+      <!-- INPUT NOMBRE CATEGORIA -->
+      <clr-input-container>
+        <label>Nombre Grupo</label>
+        <input clrInput placeholder="Nombre Grupo Categoria" name="nombreCategoria"
+          [(ngModel)]="grupoCataAddModel.nombreCatGrupo" style="width: 100%;" />
+      </clr-input-container>
+    </form>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-primary" (click)="addGrupoCatCollection()">Crear</button>
+  </div>
+</clr-modal>
+<!-- MODAL CREAR GRUPO CATEGORIAS -->
+
+<!-- MODAL CREAR CATEGORIA -->
 <clr-modal [(clrModalOpen)]="crearModal">
   <h3 class="modal-title">Agregar Categoria</h3>
   <div class="modal-body">
@@ -8,11 +64,12 @@
       <!-- INPUT NOMBRE CATEGORIA -->
       <clr-input-container>
         <label>Nombre Categoria</label>
-        <input clrInput placeholder="Nombre Mes" name="nombreMes" [(ngModel)]="catAddModel.nombreGasto" style="width: 100%;"/>
+        <input clrInput placeholder="Nombre Mes" name="nombreMes" [(ngModel)]="catAddModel.nombreGasto"
+          style="width: 100%;" />
       </clr-input-container>
       <clr-input-container>
         <label>Orden</label>
-        <input clrInput placeholder="Orden" name="orden" [(ngModel)]="catAddModel.orden" style="width: 100%;"/>
+        <input clrInput placeholder="Orden" name="orden" [(ngModel)]="catAddModel.orden" style="width: 100%;" />
       </clr-input-container>
       <clr-select-container>
         <label>Tipo Categoria</label>
@@ -29,27 +86,16 @@
 </clr-modal>
 <!-- FINAL MODAL CREAR CATEGORIA -->
 
+
+
+<!-- FINAL MODAL VER CATEGORIAS POR GRUPO -->
+
 <div class="clr-row">
-  <div class="clr-col-lg-4 clr-col-md-6 clr-col-12" >
-    <clr-datagrid>
-      <clr-dg-column [clrDgField]="'nombreGasto'">Nombre Categoria</clr-dg-column>
-      <clr-dg-column [clrDgField]="'orden'">Orden Categoria</clr-dg-column>
-      <clr-dg-column [clrDgField]="'tipoCategoria'">Tipo Categoria</clr-dg-column>
-
-
-      <clr-dg-row *clrDgItems="let item of (catModel | async) ?? []">
-        <clr-dg-cell>{{item.nombreGasto}}</clr-dg-cell>
-        <clr-dg-cell>{{item.orden}}</clr-dg-cell>
-        <clr-dg-cell>{{item.tipoCategoria}}</clr-dg-cell>
-
-      </clr-dg-row>
-
-      <clr-dg-footer>
-        <clr-dg-pagination #pagination [clrDgPageSize]="20">
-          <clr-dg-page-size [clrPageSizeOptions]="[10, 20, 50, 100]">Categorias por pagina</clr-dg-page-size>
-          {{ pagination.firstItem + 1 }} - {{ pagination.lastItem + 1 }} de {{ pagination.totalItems }} categorias
-        </clr-dg-pagination>
-      </clr-dg-footer>
-    </clr-datagrid>
+  <div class="clr-col-lg-3 clr-col-md-4 clr-col-12" *ngFor="let item of grupoCatModel ">
+    <div class="card clickable" (click)="getCategoriasGrupo(item.id, true)">
+      <h3 class="card-header">
+        {{item.data.nombreCatGrupo}}
+      </h3>
+    </div>
   </div>
 </div>

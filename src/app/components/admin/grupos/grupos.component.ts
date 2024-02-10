@@ -20,6 +20,7 @@ import { Grupo } from 'src/app/models/grupo.model';
 import { AuthService } from 'src/app/services/auth.service';
 import { GruposService } from 'src/app/services/grupos.service';
 import { ClarityIcons, shareIcon, playIcon } from '@cds/core/icon';
+import { GrupoCategoria } from 'src/app/models/grupoCategoria.model';
 
 // AGREGAR ICONOS
 ClarityIcons.addIcons(shareIcon, playIcon);
@@ -37,6 +38,7 @@ export class GruposComponent {
     nombreGrupo: '',
     integrantes: [],
     uidCreador: '',
+    grupoCategoria : ''
   };
   // grupoModel: Observable<Grupo[]>;
   grupoVerModel: Grupo = {
@@ -44,8 +46,11 @@ export class GruposComponent {
     nombreGrupo: '',
     integrantes: [],
     uidCreador: '',
+    grupoCategoria : ''
   };
+  uidUsuario: String = '';
   public grupoModel: Array<{ id: string; data: Grupo }> = [];
+  public grupoCatModel: Array<{ id: string; data: GrupoCategoria }> = [];
 
   // VARIABLES ALERTAS
   tipoAlerta: string = '';
@@ -61,6 +66,18 @@ export class GruposComponent {
     private authService: AuthService,
     private activeRoute: ActivatedRoute
   ) {
+    this.uidUsuario = this.authService.userUID!;
+
+    const grupoCatColllection = query(collection(this.firestore, 'GrupoCategoria'), where('uidCreador', '==', this.uidUsuario));
+    getDocs(grupoCatColllection).then((querySnapshot) => {
+      this.grupoCatModel = querySnapshot.docs.map((doc) => {
+        // Aquí, doc.id te dará el ID del documento
+        const data = doc.data() as GrupoCategoria;
+        return { id: doc.id, data }; // Devuelve los datos del documento junto con su ID
+      });
+    });
+
+
     const grupoColllection = query(
       collection(this.firestore, 'Grupos'),
       orderBy('nombreGrupo', 'asc')
@@ -193,9 +210,23 @@ export class GruposComponent {
   addGrupoCollection() {
     this.grupoAddModel.codigoUnico = this.grupoService.generateRandomCode(6);
     this.grupoAddModel.uidCreador = this.authService.userUID;
+    this.grupoAddModel.integrantes.push({
+      uidIntegrante: this.authService.userUID,
+      nombreIntegrante: this.authService.userName
+    })
     addDoc(collection(this.firestore, 'Grupos'), this.grupoAddModel).then(
       (documentReference: DocumentReference) => {
         console.log(documentReference);
+        getDocs(query(
+          collection(this.firestore, 'Grupos'),
+          orderBy('nombreGrupo', 'asc')
+        )).then((querySnapshot) => {
+          this.grupoModel = querySnapshot.docs.map((doc) => {
+            // Aquí, doc.id te dará el ID del documento
+            const data = doc.data() as Grupo; // Asegúrate de que el tipo de datos es correcto
+            return { id: doc.id, data }; // Devuelve los datos del documento junto con su ID
+          });
+        });
 
         this.crearModal = false;
       }

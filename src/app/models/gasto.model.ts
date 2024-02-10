@@ -6,4 +6,5 @@ export interface Gasto {
   categoriaGasto: String;
   descripcionGasto: String;
   costo: number;
+  grupoGasto: String;
 }
