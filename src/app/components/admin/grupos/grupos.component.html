@@ -22,7 +22,7 @@
         <label>Grupo de Categorias</label>
         <select clrSelect [(ngModel)]="grupoAddModel.grupoCategoria" placeholder="Grupo Categoria" name="grupoCategoria"
           style="width: 100%;">
-          <option *ngFor="let item of grupoCatModel" [value]="item.data.uidCreador">{{item.data.nombreCatGrupo}}</option>
+          <option *ngFor="let item of grupoCatModel" [value]="item.id">{{item.data.nombreCatGrupo}}</option>
         </select>
       </clr-select-container>
     </form>

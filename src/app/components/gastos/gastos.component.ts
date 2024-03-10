@@ -5,6 +5,8 @@ import {
   addDoc,
   collection,
   collectionData,
+  doc,
+  getDoc,
   getDocs,
   orderBy,
   query,
@@ -119,10 +121,12 @@ export class GastosComponent {
   fechaActual = new Date();
   gastoAddModel: Gasto = {
     personGasto: '',
+    personaUiDGasto: '',
     anioGasto: this.fechaActual.getFullYear().toString(),
     mesGasto: '',
     fechaGasto: '',
     categoriaGasto: '',
+    nombreCategoriaGasto: '',
     descripcionGasto: '',
     costo: 0,
     grupoGasto: '',
@@ -143,11 +147,14 @@ export class GastosComponent {
   //NUEVOS MODELOS
   public grupoModel: Array<{ id: string; data: Grupo }> = [];
   public categoriaModel: Array<{ id: string; data: Categoria }> = [];
-
+  categoriaSeleccionada: { id: string; data: Categoria } | null = null;
+  gastosPorAnio: { [anio: number]: { [mes: number]: Gasto[] } } = {};
+  gruposConGastos: any[] = [];
 
   getDetalleXMes: Gasto[] = [];
 
   uidUsuario: String = '';
+  nombreUsuarioLogeado: String = '';
   anioSeleccionado: String = '';
   mesSeleccionado: String = '';
 
@@ -158,6 +165,7 @@ export class GastosComponent {
 
   constructor(private authService: AuthService) {
     this.uidUsuario = this.authService.userUID!;
+    this.nombreUsuarioLogeado = this.authService.userName!;
     console.log(this.uidUsuario);
 
     const mesColllection = query(
@@ -224,9 +232,130 @@ export class GastosComponent {
         });
       })
     );
+
+    this.obtenerYOrganizarGastos();
   }
 
-  addGastoCollection() {
+  async ngOnInit() {
+    await this.obtenerGruposYGastos();
+  }
+
+  async obtenerGruposYGastos() {
+    const userUID = this.authService.userUID; // Asume que tienes el UID del usuario
+    const gruposRef = collection(this.firestore, 'Grupos');
+    const gruposSnapshot = await getDocs(gruposRef);
+    const grupos: any[] = [];
+  
+    gruposSnapshot.forEach((doc) => {
+      const grupo = { id: doc.id, ...doc.data() as any};
+      const esIntegrante = grupo.integrantes.some((integrante: { uidIntegrante: string | null; }) => integrante.uidIntegrante === userUID);
+      if (esIntegrante) {
+        
+        grupos.push(grupo);
+      }
+    });
+    console.log('grupo ',grupos);
+    // Para cada grupo que el usuario es integrante, obtén los gastos asociados
+    for (const grupo of grupos) {
+      
+      
+      const gastosRef = collection(this.firestore, 'Gasto');
+      const gastosSnapshot = await getDocs(query(gastosRef, where('grupoGasto', '==', grupo.id)));
+      let gastosPorAnioMes: {[anio: number]: { [mes: number]: { todos: any[], porPersona: any, totalGastoMes:number }}} = {};
+      gastosSnapshot.forEach(doc => {
+        const gasto = doc.data();
+        const fecha = new Date(gasto['fechaGasto']);
+        const anio = fecha.getFullYear();
+        const mes = fecha.getMonth() + 1;
+  
+        if (!gastosPorAnioMes[anio]) {
+          gastosPorAnioMes[anio] = {};
+        }
+        if (!gastosPorAnioMes[anio][mes]) {
+          gastosPorAnioMes[anio][mes] = { todos: [], porPersona: {}, totalGastoMes: 0 };
+        }
+        gastosPorAnioMes[anio][mes].todos.push(gasto);
+  
+        const personKey = gasto['personaUiDGasto'];
+        if (!gastosPorAnioMes[anio][mes].porPersona[personKey]) {
+          gastosPorAnioMes[anio][mes].porPersona[personKey] = [];
+        }
+        gastosPorAnioMes[anio][mes].porPersona[personKey].push(gasto);
+        gastosPorAnioMes[anio][mes].totalGastoMes += Number(gasto['costo']);
+      });
+  
+      this.gruposConGastos.push({
+        nombre: grupo.nombreGrupo,
+        gastos: gastosPorAnioMes,
+        totalGastos: gastosSnapshot.docs.length // Cantidad total de gastos para este grupo
+      });
+    }
+  
+    // Ordena los grupos por la cantidad total de gastos, de mayor a menor
+    this.gruposConGastos = this.gruposConGastos.sort((a, b) => b.totalGastos - a.totalGastos);
+    console.log('gruposConGastos ',this.gruposConGastos);
+    
+  }
+  
+  
+
+
+  obtenerYOrganizarGastos() {
+    const gastosRef = collection(this.firestore, 'Gasto');
+    const gastosQuery = query(gastosRef);
+    collectionData(gastosQuery, { idField: 'id' }).subscribe(gastos => {     
+      gastos.forEach((gasto: any) => {
+        const fecha = gasto.fechaGasto instanceof Date ? gasto.fechaGasto : new Date(gasto.fechaGasto);
+        const anio = fecha.getFullYear();
+        const mes = fecha.getMonth() + 1; // getMonth() devuelve 0-11
+        const gastoMapeado: Gasto = {
+          personGasto: gasto.personGasto,
+          personaUiDGasto: gasto.personaUiDGasto,
+          anioGasto: gasto.anioGasto,
+          mesGasto: gasto.mesGasto,
+          fechaGasto: gasto.fechaGasto,
+          categoriaGasto: gasto.categoriaGasto,
+          nombreCategoriaGasto: gasto.nombreCategoriaGasto,
+          descripcionGasto: gasto.descripcionGasto,
+          costo: gasto.costo,
+          grupoGasto: gasto.grupoGasto,
+          // Asegúrate de incluir aquí cualquier otra propiedad necesaria
+        };
+    
+        if (!this.gastosPorAnio[anio]) {
+          this.gastosPorAnio[anio] = {};
+        }
+        if (!this.gastosPorAnio[anio][mes]) {
+          this.gastosPorAnio[anio][mes] = [];
+        }
+        this.gastosPorAnio[anio][mes].push(gastoMapeado);
+      });
+    });
+    console.log('GASTOXANIO ', this.gastosPorAnio);
+    
+  }
+  getAnios(indexGrupo: number): number[] {
+    return Object.keys(this.gruposConGastos[indexGrupo].gastos).map(Number).sort();
+  }
+  
+    getMeses(indexGrupo: number, anio: number): any[] {
+      return Object.keys(this.gruposConGastos[indexGrupo].gastos[anio]).map(Number).sort().map(mes => ({ nombre: this.mesToString(mes), numero: mes }));
+    }
+    
+    // Conversión de número de mes a nombre de mes
+    mesToString(mes: number): string {
+      const meses = ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+      return meses[mes - 1];
+    }
+
+
+  addGastoCollection() {    
+    this.gastoAddModel.personGasto = this.nombreUsuarioLogeado;
+    this.gastoAddModel.personaUiDGasto = this.uidUsuario;
+    this.gastoAddModel.anioGasto = this.fechaActual.getFullYear().toString();
+    this.gastoAddModel.mesGasto = this.mesToString(this.fechaActual.getMonth());
+    this.gastoAddModel.categoriaGasto = this.categoriaSeleccionada?.id || '';
+    this.gastoAddModel.nombreCategoriaGasto = this.categoriaSeleccionada?.data.nombreGasto || '';
     addDoc(collection(this.firestore, 'Gasto'), this.gastoAddModel).then(
       (documentReference: DocumentReference) => {
         console.log(documentReference);
@@ -241,7 +370,7 @@ export class GastosComponent {
 
     const catQuery = query(
       collection(this.firestore, 'Categoria'),
-      where('grupoGasto', '==', grupoCat),
+      where('grupo', '==', grupoCat),
       where('tipoCategoria', '==', 'Gasto'),
       orderBy('orden', 'asc')
     );
@@ -256,6 +385,21 @@ export class GastosComponent {
 
     });
 
+  }
+
+  onGrupoGastoChange() {
+    // Encuentra el objeto en grupoModel que coincide con el valor seleccionado
+    const selectedGrupo = this.grupoModel.find(grupo => grupo.id === this.gastoAddModel.grupoGasto);
+    console.log(selectedGrupo);
+    
+    if (selectedGrupo && selectedGrupo.data.hasOwnProperty('grupoCategoria')) {
+      // Ahora que tienes el grupo seleccionado, puedes obtener la propiedad grupoCategoria
+      const grupoCategoria = selectedGrupo.data.grupoCategoria;
+      // Llamas a la función getCatXGrupoGasto con grupoCategoria
+      this.getCatXGrupoGasto(grupoCategoria);
+    } else{
+      this.categoriaModel = [];
+    }
   }
 
   // OBTIENE LOS GASTOS POR ANIO AGRUPADO POR MES Y FILTRADO POR LOS MESES QUE SE REALIZO GASTO
@@ -274,6 +418,18 @@ export class GastosComponent {
     // Actualizar el estado con los gastos filtrados y su suma por mes
     this.sumByMonth = sumByMonth;
   }
+
+  // NUEVO: OBTIENE DETALLE GASTOS POR ANIO Y MES AGRUPADO POR GRUPO
+  async getGastosDetalleXMesGrupo(vIndexGrupo: number,vAnio: number, vMes: string) {
+    let gastosTodos = this.gruposConGastos[vIndexGrupo].gastos[vAnio][vMes].todos;
+    let gastosPorPersona = this.gruposConGastos[vIndexGrupo].gastos[vAnio][vMes].porPersona;
+
+    
+    gastosTodos.forEach((gasto: any) => {
+      gasto.categoriaGasto
+    });
+  }
+
 
   //OBTIENE LOS GASTOS REALIZADOS ESE MES POR CATEGORIA
   async getGastosDetalleXMes(vAnio: Number, vMes: string) {

@@ -44,6 +44,8 @@
           <a hidden aria-hidden="true"></a>
           <cds-icon shape="administrator" clrVerticalNavIcon></cds-icon> Admin
           <clr-vertical-nav-group-children *clrIfExpanded>
+            <a clrVerticalNavLink routerLink="admin/grupos" routerLinkActive="active"
+              [routerLinkActiveOptions]="{exact: true}">Grupos</a>
             <a clrVerticalNavLink routerLink="admin/anio" routerLinkActive="active"
               [routerLinkActiveOptions]="{exact: true}">Año</a>
             <a clrVerticalNavLink routerLink="admin/mes" routerLinkActive="active"
